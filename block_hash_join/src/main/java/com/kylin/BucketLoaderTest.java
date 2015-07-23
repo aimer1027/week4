@@ -9,7 +9,9 @@ package com.kylin;
  */
 
 import java.io.* ;
+import java.util.List;
 
+import com.kylin.join.HashJoin;
 import com.kylin.relation.* ;
 import com.kylin.util.* ;
 
@@ -18,16 +20,32 @@ public class BucketLoaderTest
     public static void main ( String [] args ) throws Exception
     {
     String personPath = "/workspace/java/data_generator/p.csv" ;
-    String orderPath = "" ;
+    String orderPath = "/workspace/java/data_generator/o.csv" ;
+    String resultPath = "/tmp/joined.csv" ;
 
-    Bucket personBucket = new Bucket ("personBucket" , "personId ", "personName") ;
 
+   Bucket personBucket = new Bucket ("personBucket" , "personId ", "personName") ;
+
+   TableRelation orderTable = new TableRelation( "orderTable" ,"personId" , "orderId" , "amount") ;
+
+        List<Item> itemList = orderTable.getItems() ;
+       for ( Item item : itemList)
+               System.out.println(item.getName()) ;
+
+ /*
     BucketLoader bucketLoader = new BucketLoader (personPath , personBucket   ) ;
-
-
+    TableLoader fileLoader = new TableLoader(orderPath ,orderTable )   ;
     personBucket = bucketLoader.getBucekt() ;
 
     personBucket.print() ;
+
+    */
+
+        HashJoin joiner = new HashJoin
+                (   personPath ,  orderPath ,  resultPath ,   10    ,  personBucket , orderTable  )  ;
+
+          joiner.exeucte();
+
 
     }
 }

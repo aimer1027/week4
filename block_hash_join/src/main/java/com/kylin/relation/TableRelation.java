@@ -21,12 +21,15 @@ public class TableRelation implements Relation
     private String name ;
     private List<Item> itemList ;
     private List<Record> recordList ;
+    private String primaryKeyName ;
 
     public TableRelation ( String name , List<Item> itemList )
     {
         this.name = name ;
         this.itemList = itemList ;
         this.recordList = new ArrayList<Record>() ;
+
+        this.primaryKeyName = this.itemList.get(0).getName() ;
 
     }
 
@@ -35,6 +38,8 @@ public class TableRelation implements Relation
         this.name = name ;
         this.itemList = new ArrayList<Item> () ;
         this.recordList = new ArrayList<Record>() ;
+
+        this.primaryKeyName = itemNames[0]  ;
 
         for ( String item : itemNames )
         {
@@ -159,6 +164,10 @@ public class TableRelation implements Relation
         return this.recordList.size() ;
     }
 
-
+    @Override
+    public Item getPrimaryKeyItem()
+    {
+        return this.getItem(this.primaryKeyName) ;
+    }
 
 }

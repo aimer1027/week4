@@ -30,6 +30,7 @@ public class Bucket  extends HashMap<String , List<Record>>
     private List<Item> attributeList ;
     private String  bucketName ;
     private long bucketNumber  = 1000 ;
+    private String primaryKeyName ;
 
     public String getHashKey( String id   )
     {
@@ -59,6 +60,23 @@ public class Bucket  extends HashMap<String , List<Record>>
               this.attributeList.add( new Item ( item ));
         }
 
+        this.primaryKeyName = itemList[0] ;
+    }
+
+
+    public Item getItem( String itemName )
+    {
+        // first find the itemList to find a item which name match with the input itemName
+        // if not find one , return null
+        for ( Item item : this.attributeList )
+        {
+            if ( item.getName().equals(itemName ))
+            {
+                return item ;
+            }
+        }
+
+        return null ;
     }
 
     public void addRecorder ( Record record )  throws ElementsNotMatchException
@@ -145,5 +163,9 @@ public class Bucket  extends HashMap<String , List<Record>>
     }
 
 
+    public Item getPrimaryKeyItem ()
+    {
+        return this.getItem(this.primaryKeyName) ;
+    }
 
 }

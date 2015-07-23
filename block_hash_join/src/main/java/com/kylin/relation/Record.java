@@ -12,18 +12,29 @@ import com.kylin.util.ElementsNotMatchException ;
 import com.kylin.relation.Item ;
 
 import java.util.Iterator;
+import java.util.List ;
 import java.util.Map ;
 import java.util.HashMap ;
 import java.util.Set;
+import java.util.ArrayList ;
 
 
 public class Record extends HashMap<Item, Object>
 {
     private static final long serialVersionUID = 1L ;
+    private List<Item> itemList ;
+    private String primaryKeyValue ;
+
+    public Record ( List<Item> itemList)
+    {
+        this.itemList = itemList ;
+
+    }
 
     public Record ( Relation format , Object ... elements )
         throws ElementsNotMatchException
     {
+        this.itemList = format.getItems() ;
         if ( format.getItems().size() != elements.length )
         {
             throw new ElementsNotMatchException() ;
@@ -37,12 +48,14 @@ public class Record extends HashMap<Item, Object>
             put( format.getItems().get(i) , elements[i]) ;
         }
 
+        this.primaryKeyValue =  (String)get(format.getPrimaryKeyItem()) ;
 
     }
 
     public Record ( Bucket format , Object ... elements )
         throws ElementsNotMatchException
     {
+        this.itemList = format.getItemList() ;
         if ( format.getItemList().size() != elements.length )
         {
             throw new ElementsNotMatchException() ;
@@ -52,6 +65,8 @@ public class Record extends HashMap<Item, Object>
         {
             put(format.getItemList().get(i) , elements[i])  ;
         }
+
+        this.primaryKeyValue =  (String)get(format.getPrimaryKeyItem()) ;
 
     }
 
@@ -80,15 +95,27 @@ public class Record extends HashMap<Item, Object>
         return key.size() ;
     }
 
+    public List<Item> getRecordItemList ()
+    {
+     return this.itemList ;
+
+    }
+
+
+
     public String getId ()
     {
-        Set set = entrySet() ;
+
+        return this.primaryKeyValue ;
+      /*  Set set = entrySet() ;
 
         Iterator iterator = set.iterator() ;
 
         Map.Entry<Item , Object> entry = (Map.Entry<Item, Object>)iterator.next() ;
 
          return (String)entry.getValue() ;
+         */
+
     }
 
 

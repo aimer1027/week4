@@ -26,5 +26,6 @@ public interface Relation extends Iterable<Record>
 
     // return how may records contained in this table
     int numberOfRecords () ;
+    Item getPrimaryKeyItem()  ;
 
 }
